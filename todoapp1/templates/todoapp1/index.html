@@ -17,5 +17,13 @@
         <br>
         <button type="submit">追加</button>
     </form>
+    <h2>タスクリスト</h2>
+    <ul>
+        {% for task in tasks %}
+            <li>{{ task.0 }}: {{ task.1 }}</li>
+        {% empty %}
+            <li>タスクはありません。</li>
+        {% endfor %}
+    </ul>
 </body>
 </html>
