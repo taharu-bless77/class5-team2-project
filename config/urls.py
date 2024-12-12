@@ -20,5 +20,5 @@ from todoapp1 import views as todoapp_views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('todoapp/',include('todoapp01.urls'))
+    path('todoapp/',include('todoapp1.urls'))
 ]
