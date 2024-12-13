@@ -1,7 +1,7 @@
 # views.py
 from django.shortcuts import render, redirect
 from django.http import JsonResponse
-
+from datetime import datetime
 # 二次元リストを初期化
 tasks = []
 
@@ -23,3 +23,8 @@ def get_tasks_by_date(request):
     date = request.GET.get('date')  # クエリパラメータから日付を取得
     filtered_tasks = [task for task in tasks if task[0] == date]  # 日付に基づいてタスクをフィルタリング
     return JsonResponse(filtered_tasks, safe=False)  # フィルタリングされたタスクをJSON形式で返す
+
+def task_order(tasks):
+    # タスクを日付でソートする
+    sorted_tasks = sorted(tasks, key=lambda x: datetime.strptime(x[0], '%Y-%m-%d'))
+    return sorted_tasks
