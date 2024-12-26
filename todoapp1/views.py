@@ -25,6 +25,6 @@ def get_tasks_by_date(request):
     return JsonResponse(filtered_tasks, safe=False)  # フィルタリングされたタスクをJSON形式で返す
 
 def task_order(tasks):
-    # タスクを日付でソートする
+    t
     sorted_tasks = sorted(tasks, key=lambda x: datetime.strptime(x[0], '%Y-%m-%d'))
     return sorted_tasks
