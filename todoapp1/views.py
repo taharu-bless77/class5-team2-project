@@ -1,30 +1,18 @@
 # views.py
 from django.shortcuts import render, redirect
 from django.http import JsonResponse
-from datetime import datetime
-# 二次元リストを初期化
-tasks = []
-
-def add_task(date, task):
-    tasks.append([date, task])  # 日付とタスクをリストに追加
+from .models import Article
 
 def add_task_view(request):
     if request.method == 'POST':
-        date = request.POST.get('date')  # フォームから日付を取得
-        task = request.POST.get('task')  # フォームからタスクを取得
-        add_task(date, task)  # タスクを追加
-        return redirect('index')  # タスク追加後にインデックスページにリダイレクト
-    return render(request, 'todoapp1/index.html', {'tasks': tasks})  # GETリクエストの場合はフォームを表示
-
-def index_view(request):
-    return render(request, 'todoapp1/index.html', {'tasks': tasks})  # タスクリストを表示
+        date = request.POST.get('date')
+        task = request.POST.get('task')
+        priority = request.POST.get('priority')  # 優先度を取得
+        Article.objects.create(date=date, task=task, priority=priority)  # タスクを作成
+        return redirect('index')
+    return render(request, 'todoapp1/index.html', {'tasks': Article.objects.all()})
 
 def get_tasks_by_date(request):
-    date = request.GET.get('date')  # クエリパラメータから日付を取得
-    filtered_tasks = [task for task in tasks if task[0] == date]  # 日付に基づいてタスクをフィルタリング
-    return JsonResponse(filtered_tasks, safe=False)  # フィルタリングされたタスクをJSON形式で返す
-
-def task_order(tasks):
-    t
-    sorted_tasks = sorted(tasks, key=lambda x: datetime.strptime(x[0], '%Y-%m-%d'))
-    return sorted_tasks
+    date = request.GET.get('date')
+    filtered_tasks = Article.objects.filter(date=date).values('task', 'priority')  # 日付に基づいてタスクをフィルタリング
+    return JsonResponse(list(filtered_tasks), safe=False)
