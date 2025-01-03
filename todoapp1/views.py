@@ -16,3 +16,7 @@ def get_tasks_by_date(request):
     date = request.GET.get('date')
     filtered_tasks = Article.objects.filter(date=date).values('task', 'priority')  # 日付に基づいてタスクをフィルタリング
     return JsonResponse(list(filtered_tasks), safe=False)
+
+def index_view(request):
+    tasks = Article.objects.all()  # すべてのタスクを取得
+    return render(request, 'todoapp1/index.html', {'tasks': tasks})  # タスクリストを表示
