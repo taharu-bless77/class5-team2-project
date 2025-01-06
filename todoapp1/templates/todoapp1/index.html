@@ -2,6 +2,17 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
+    <style>
+        .high {
+            color: red;
+        }
+        .medium {
+            color: orange;
+        }
+        .low {
+            color: green;
+        }
+    </style>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TODOアプリ</title>
@@ -26,7 +37,17 @@
     <h2>タスクリスト</h2>
     <ul id="task-list">
         {% for task in tasks %}
-            <li>{{ task.date }} - {{ task.task }} - 優先度: {{ task.priority }}</li>
+            <li class="
+                {% if task.priority >= 10 %}
+                    high
+                {% elif task.priority >= 6 %}
+                    medium
+                {% else %}
+                    low
+                {% endif %}
+            ">
+                {{ task.date }} - {{ task.task }} - 優先度: {{ task.priority }}
+            </li>
         {% empty %}
             <li>タスクはありません。</li>
         {% endfor %}
