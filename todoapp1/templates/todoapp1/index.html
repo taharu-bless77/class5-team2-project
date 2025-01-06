@@ -17,68 +17,19 @@
         <label for="task">タスク:</label>
         <input type="text" id="task" name="task" required>
         <br>
+        <label for="priority">優先度:</label>
+        <input type="number" id="priority" name="priority" required>
+        <br>
         <button type="submit">追加</button>
     </form>
 
     <h2>タスクリスト</h2>
-    <ul>
+    <ul id="task-list">
         {% for task in tasks %}
-            <li>{{ task.0 }}: {{ task.1 }}</li>
+            <li>{{ task.date }} - {{ task.task }} - 優先度: {{ task.priority }}</li>
         {% empty %}
             <li>タスクはありません。</li>
         {% endfor %}
     </ul>
-    
-    <div id="calendar" class="calender-wrap"></div>
-
-    <script>
-        const tasks= [
-            {% for task in tasks %}
-                {date: new Date('{{task.0|date:"Y-m-d"}}'),task:'{{ task.1 }}'},
-            {% endfor %}
-        ];
-        const date=new Date();
-        const today=date.getDate();
-        const currentMonth=date.getMonth();
-
-        function createCalendar(month) {
-            const monthDays = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
-            let calendarHTML = '<table class="calendar"><thead><tr>';
-            for (let i=0;i<7;i++) {
-                calendarHTML+=`<th>${monthDays[i]}</th>`;
-            }
-            calendarHTML+= '</tr></thead><tbody>';
-                const daysInMonth = new Date(date.getFullYear(), month + 1, 0).getDate();
-            const firstDay = new Date(date.getFullYear(), month, 1).getDay();
-            let dayCount = 1;
-            for (let i = 0; i < 6; i++) {
-                calendarHTML += '<tr>';
-                for (let j = 0; j < 7; j++) {
-                    if (i === 0 && j < firstDay) {
-                        calendarHTML += `<td></td>`;
-                    } else if (dayCount > daysInMonth) {
-                        calendarHTML += `<td></td>`;
-                    } else {
-                        // 今日の日付にclassを付ける
-                        let tdClass = (dayCount === today && month === currentMonth) ? 'today' : '';
-                        
-                        // 日付にタスクを表示
-                        const taskForDay = tasks.find(task => task.date.getDate() === dayCount && task.date.getMonth() === month);
-                        const taskText = taskForDay ? `<br>${taskForDay.task}` : '';
-
-                        calendarHTML += `<td class="${tdClass}">${dayCount}${taskText}</td>`;
-                        dayCount++;
-                    }
-                }
-                calendarHTML += '</tr>';
-                if (dayCount > daysInMonth) {
-                    break;
-                }
-            }
-            calendarHTML += '</tbody></table>';
-            return calendarHTML;
-        }
-        document.getElementById('calendar').innerHTML = createCalendar(currentMonth);
-    </script>
 </body>
 </html>
