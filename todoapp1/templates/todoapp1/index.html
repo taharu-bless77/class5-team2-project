@@ -245,5 +245,45 @@
             {% endfor %}
         </tbody>
     </table>
+    <!-- </table>の後、</body>の前に以下のJavaScriptを追加 -->
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // 削除ボタンにイベントリスナーを追加
+        document.querySelectorAll('.delete-task').forEach(button => {
+            button.addEventListener('click', function() {
+                const taskId = this.getAttribute('data-id');
+                if (confirm('このタスクを削除してもよろしいですか？')) {
+                    // CSRFトークンを取得
+                    const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+    
+                    // 削除リクエストを送信
+                    fetch(`/delete_task/${taskId}/`, {
+                        method: 'POST',
+                        headers: {
+                            'X-CSRFToken': csrfToken,
+                            'Content-Type': 'application/json'
+                        }
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            // 削除成功時、該当のタスク要素を削除
+                            this.closest('li').remove();
+                            // ページをリロード
+                            location.reload();
+                        } else {
+                            alert('タスクの削除に失敗しました。');
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        alert('エラーが発生しました。');
+                    });
+                }
+            });
+        });
+    });
+    </script>
 </body>
 </html>
