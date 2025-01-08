@@ -43,6 +43,9 @@ def index_view(request, year=None, month=None):
 
 def delete_task_view(request, task_id):
     if request.method == 'POST':
-        task = Article.objects.get(id=task_id)
-        task.delete()
-        return JsonResponse({'success': True})
+        try:
+            task = Article.objects.get(id=task_id)
+            task.delete()
+            return JsonResponse({'success': True})
+        except Article.DoesNotExist:
+            return JsonResponse({'success': False, 'error': 'Task not found'}, status=404)
