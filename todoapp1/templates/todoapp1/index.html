@@ -3,14 +3,162 @@
 <html lang="ja">
 <head>
     <style>
+        body {
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+
+        h1, h2 {
+            color: #333;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        /* フォームのスタイル */
+        form {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+        }
+
+        form label {
+            display: inline-block;
+            width: 80px;
+            margin-bottom: 10px;
+        }
+
+        form input {
+            padding: 8px;
+            margin-bottom: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            width: 200px;
+        }
+
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        /* タスクリストのスタイル */
+        #task-list {
+            list-style: none;
+            padding: 0;
+            margin-bottom: 30px;
+        }
+
+        #task-list li {
+            background: white;
+            margin-bottom: 8px;
+            padding: 12px;
+            border-radius: 4px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+
+        /* カレンダーのスタイル */
+        table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 3px;
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        th {
+            background-color: #4CAF50;
+            color: white;
+            padding: 15px;
+            font-weight: bold;
+        }
+
+        td {
+            border: 1px solid #eee;
+            padding: 10px;
+            vertical-align: top;
+            height: 120px;
+            background: white;
+        }
+
+        .day {
+            position: relative;
+            transition: background-color 0.2s;
+        }
+
+        .day:hover {
+            background-color: #f8f8f8;
+        }
+
+        .day strong {
+            position: absolute;
+            top: 5px;
+            left: 5px;
+            font-size: 14px;
+            color: #666;
+        }
+
+        .day ul {
+            list-style: none;
+            padding: 0;
+            margin: 25px 0 0 0;
+        }
+
+        .day li {
+            font-size: 12px;
+            margin-bottom: 5px;
+            padding: 4px 6px;
+            border-radius: 3px;
+            background: #f8f8f8;
+        }
+
+        /* 優先度の色分け */
         .high {
-            color: red;
+            color: white;
+            background-color: #ff4444 !important;
         }
+
         .medium {
-            color: orange;
+            color: white;
+            background-color: #ffa726 !important;
         }
+
         .low {
-            color: green;
+            color: white;
+            background-color: #66bb6a !important;
+        }
+
+        /* レスポンシブデザイン */
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+
+            form input {
+                width: 100%;
+            }
+
+            .day {
+                height: 100px;
+            }
+
+            .day li {
+                font-size: 11px;
+            }
         }
     </style>
     <meta charset="UTF-8">
@@ -52,5 +200,49 @@
             <li>タスクはありません。</li>
         {% endfor %}
     </ul>
+    <h2>{{ month_name }} {{ year }} のカレンダー</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>日</th>
+                <th>月</th>
+                <th>火</th>
+                <th>水</th>
+                <th>木</th>
+                <th>金</th>
+                <th>土</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for week in calendar %}
+                <tr>
+                    {% for day in week %}
+                        <td class="day">
+                            {% if day != 0 %}
+                                <strong>{{ day }}</strong>
+                                <ul>
+                                    {% for task in tasks %}
+                                        {% if task.date.day == day and task.date.month == month and task.date.year == year %}
+                                            <li class="
+                                                {% if task.priority >= 10 %}
+                                                    high
+                                                {% elif task.priority >= 6 %}
+                                                    medium
+                                                {% else %}
+                                                    low
+                                                {% endif %}
+                                            ">
+                                                {{ task.task }} - 優先度: {{ task.priority }}
+                                            </li>
+                                        {% endif %}
+                                    {% endfor %}
+                                </ul>
+                            {% endif %}
+                        </td>
+                    {% endfor %}
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
 </body>
 </html>
