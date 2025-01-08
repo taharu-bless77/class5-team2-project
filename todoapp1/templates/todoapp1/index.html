@@ -195,6 +195,7 @@
                 {% endif %}
             ">
                 {{ task.date }} - {{ task.task }} - 優先度: {{ task.priority }}
+                <button class="delete-task" data-id="{{ task.id }}">削除</button>
             </li>
         {% empty %}
             <li>タスクはありません。</li>

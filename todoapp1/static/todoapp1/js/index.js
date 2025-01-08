@@ -34,6 +34,26 @@ document.addEventListener('DOMContentLoaded', function() {
         })
         .catch(error => console.error('Error adding task:', error));
     });
+
+    // 削除ボタンのイベントリスナーを追加
+    document.querySelectorAll('.delete-task').forEach(button => {
+        button.addEventListener('click', function() {
+            const taskId = this.getAttribute('data-id');
+            fetch(`/todoapp/delete_task/${taskId}/`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': getCookie('csrftoken')
+                }
+            })
+            .then(response => {
+                if (response.ok) {
+                    this.parentElement.remove(); // タスクをリストから削除
+                }
+            })
+            .catch(error => console.error('Error deleting task:', error));
+        });
+    });
 });
 
 // CSRFトークンを取得する関数

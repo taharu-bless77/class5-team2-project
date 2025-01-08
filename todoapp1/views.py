@@ -40,3 +40,9 @@ def index_view(request, year=None, month=None):
         'month': month,
         'tasks': tasks
     })
+
+def delete_task_view(request, task_id):
+    if request.method == 'POST':
+        task = Article.objects.get(id=task_id)
+        task.delete()
+        return JsonResponse({'success': True})
